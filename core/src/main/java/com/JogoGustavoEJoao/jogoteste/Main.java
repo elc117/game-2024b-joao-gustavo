@@ -28,6 +28,7 @@ public class Main extends ApplicationAdapter {
     private Array<Rectangle> enemies;
     private long lastEnemyTime;
     private int score, power, numEnemies;
+    private int questionIndex; // Índice atual da pergunta
 
     private BitmapFont bitmap;
 
@@ -36,21 +37,22 @@ public class Main extends ApplicationAdapter {
 
     @Override
     public void create() {
+        // Inicialize a lista de perguntas
         Perguntas = new Array<>();
         Perguntas.add(new Pergunta(
             "Em que ano a cidade de Santa Maria foi fundada?",
             new String[]{"1900", "1857", "1800"},
-            1)); // Resposta correta: 1857
-
+            1 // Resposta correta: 1857
+        ));
         Perguntas.add(new Pergunta(
             "Santa Maria também é conhecida como:",
             new String[]{"Cidade dos Ventos", "Capital do Sul", "Coração do Rio Grande"},
-            2)); // Resposta correta: Coração do Rio Grande
-
+            2 // Resposta correta: Coração do Rio Grande
+        ));
         Perguntas.add(new Pergunta(
             "A Quarta Colônia é composta por quantos municípios?",
-            new String[]{"9", "11", "7"},
-            0)); // Resposta correta: 9
+            new String[]{"11", "11", "9"},
+            2)); // Resposta correta: 9
 
         Perguntas.add(new Pergunta(
             "A Quarta Colônia foi formada por imigrantes de que nacionalidade?",
@@ -84,8 +86,8 @@ public class Main extends ApplicationAdapter {
 
         Perguntas.add(new Pergunta(
             "Santa Maria é reconhecida como um polo:",
-            new String[]{"Militar e Educacional", "Industrial e Comercial", "Agrícola e Logístico"},
-            0)); // Resposta correta: Militar e Educacional
+            new String[]{"Agrícola e Logístico", "Industrial e Comercial", "Militar e Educacional"},
+            2)); // Resposta correta: Militar e Educacional
 
         Perguntas.add(new Pergunta(
             "Santa Maria também é conhecida como ____________ por ter uma localização estratégica no centro do estado.",
@@ -98,6 +100,11 @@ public class Main extends ApplicationAdapter {
             1)); // Resposta correta: Festival do Imigrante
 
         Perguntas.add(new Pergunta(
+            "Qual é o clube de Santa Maria conhecido por ser fundado por ferroviários?",
+            new String[]{"Internacional-SM", "Grêmio Novorizonte", "Riograndense"},
+            2)); // Resposta correta: Riograndense
+
+        Perguntas.add(new Pergunta(
             "Sobre o turismo na Quarta Colônia, se destacam:",
             new String[]{"Natureza e gastronomia", "Comércio e eventos", "Arte e música"},
             0)); // Resposta correta: Natureza e gastronomia
@@ -106,6 +113,11 @@ public class Main extends ApplicationAdapter {
             "Qual o evento cultural mais conhecido em Santa Maria?",
             new String[]{"Feira do Livro", "Festival de Música", "Semana de Arte"},
             0)); // Resposta correta: Feira do Livro
+
+        Perguntas.add(new Pergunta(
+            "Como é alcunhado o Esporte Clube Internacional de Santa Maria?",
+            new String[]{"Alvinegro", "Vermelhão", "Alvirrubro"},
+            2)); // Resposta correta: Alvirrubro
 
         Perguntas.add(new Pergunta(
             "Qual a população aproximada de Santa Maria?",
@@ -137,9 +149,14 @@ public class Main extends ApplicationAdapter {
             new String[]{"Criar o primeiro jornal da cidade", "Fundar a UFSM", "Ser prefeito da cidade"},
             1)); // Resposta correta: Fundar a UFSM
 
-        currentQuestion = Perguntas.get(0);
+        Perguntas.add(new Pergunta("Qual é o nome do parque em Santa Maria que preserva a memória ferroviária da cidade?"
+        ,new String[]{"Parque Chacará das Flores", "Parque Ibirapuera","Parque Itaimbé"},
+            2)); // Resposta Correta: Parque Itaimbé
 
+        questionIndex = 0;
+        currentQuestion = Perguntas.get(questionIndex);
 
+        // Inicialize os componentes do jogo
         batch = new SpriteBatch();
         img = new Texture("bg.png");
         tNave = new Texture("spaceship.png");
@@ -160,15 +177,11 @@ public class Main extends ApplicationAdapter {
 
         score = 0;
         power = 3;
-        numEnemies = 799999999;
-
 
         bitmap = new BitmapFont();
         bitmap.setColor(Color.WHITE);
 
         spawnEnemies();
-
-
         gameover = false;
     }
 
@@ -188,14 +201,14 @@ public class Main extends ApplicationAdapter {
             }
             batch.draw(nave, posX, posY);
 
-            // Desenha inimigos com respostas
+
             for (int i = 0; i < enemies.size; i++) {
                 Rectangle enemy = enemies.get(i);
                 batch.draw(tEnemy, enemy.x, enemy.y, enemy.width, enemy.height);
                 bitmap.draw(batch, currentQuestion.answers[i], enemy.x + 80, enemy.y + enemy.height / 2);
             }
 
-            // Exibe a pergunta na parte inferior
+
             bitmap.draw(batch, "Pergunta: " + currentQuestion.text, 20, 150);
             bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
             bitmap.draw(batch, "Power: " + power, Gdx.graphics.getWidth() - 150, Gdx.graphics.getHeight() - 20);
@@ -205,14 +218,16 @@ public class Main extends ApplicationAdapter {
             if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
                 score = 0;
                 power = 3;
-                posX = 0;
-                posY = 0;
+                questionIndex = 0;
+                currentQuestion = Perguntas.get(questionIndex);
+                spawnEnemies();
                 gameover = false;
             }
         }
 
         batch.end();
     }
+
     @Override
     public void dispose() {
         batch.dispose();
@@ -236,24 +251,22 @@ public class Main extends ApplicationAdapter {
         }
     }
 
-
-
     private void checkCollisions() {
         for (Iterator<Rectangle> iter = enemies.iterator(); iter.hasNext(); ) {
             Rectangle enemy = iter.next();
             if (collide(enemy.x, enemy.y, enemy.width, enemy.height, xMissile, yMissile, missile.getWidth(), missile.getHeight()) && attack) {
                 iter.remove();
-                enemies.clear();
                 attack = false;
                 score++;
-                Timer.schedule(new Timer.Task() {
-                    @Override
-                    public void run() {
-                        spawnEnemies();
-                    }
-                }, 1);
 
 
+                questionIndex++;
+                if (questionIndex < Perguntas.size) {
+                    currentQuestion = Perguntas.get(questionIndex);
+                    spawnEnemies();
+                } else {
+                    gameover = true;
+                }
                 break;
             }
         }
@@ -267,7 +280,7 @@ public class Main extends ApplicationAdapter {
 
         if (attack) {
             if (yMissile < Gdx.graphics.getWidth()) {
-                yMissile += 20;
+                yMissile += 40;
             } else {
                 yMissile = posY + nave.getWidth() / 2;
                 attack = false;
@@ -277,7 +290,6 @@ public class Main extends ApplicationAdapter {
             xMissile = posX + nave.getHeight() / 2 - 12;
         }
     }
-
 
     private void spawnEnemies() {
         enemies.clear();
@@ -299,3 +311,4 @@ public class Main extends ApplicationAdapter {
         return x1 + w1 > x2 && x1 < x2 + w2 && y1 + h1 > y2 && y1 < y2 + h2;
     }
 }
+
