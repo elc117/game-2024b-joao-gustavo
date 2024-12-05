@@ -88,7 +88,7 @@ public class Main extends ApplicationAdapter {
                 batch.draw(tEnemy, enemy.x, enemy.y);
             }
 
-
+            bitmap.draw(batch, "Pergunta: Pergunta de exemplo", 20, Gdx.graphics.getHeight() - 620);
             bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
             bitmap.draw(batch, "Power: " + power, Gdx.graphics.getWidth() - 150, Gdx.graphics.getHeight() - 20);
         } else {
@@ -130,16 +130,6 @@ public class Main extends ApplicationAdapter {
                 posX -= velocity;
             }
         }
-//        if (Gdx.input.isKeyPressed(Input.Keys.UP)) {
-//            if (posY < Gdx.graphics.getHeight() - nave.getHeight()) {
-//                posY += velocity;
-//            }
-//        }
-//        if (Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-//            if (posY > 0) {
-//                posY -= velocity;
-//            }
-//        }
     }
 
     //    private void moveMissile() {
@@ -190,7 +180,7 @@ public class Main extends ApplicationAdapter {
 
         if (attack) {
             if (yMissile < Gdx.graphics.getWidth()) {
-                yMissile += 40;
+                yMissile += 20;
             } else {
                 yMissile = posY + nave.getWidth() / 2;
                 attack = false;
@@ -250,6 +240,7 @@ public class Main extends ApplicationAdapter {
         float enemySpacing = Gdx.graphics.getWidth() / 4.0f;
 
 
+
         for (int i = 0; i < 3; i++) {
             float enemyX = enemySpacing * (i + 1) - tEnemy.getWidth() / 2; // Posiciona os inimigos
             float enemyY = Gdx.graphics.getHeight() - tEnemy.getHeight(); // No topo da tela
@@ -266,7 +257,6 @@ public class Main extends ApplicationAdapter {
             enemies.add(enemy);
         }
     }
-
 
     private boolean collide(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2) {
         return x1 + w1 > x2 && x1 < x2 + w2 && y1 + h1 > y2 && y1 < y2 + h2;
