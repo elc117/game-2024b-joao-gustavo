@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.utils.Timer;
 
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -57,7 +58,9 @@ public class Main extends ApplicationAdapter {
 
         bitmap = new BitmapFont();
         bitmap.setColor(Color.WHITE);
+        //while(!gameover) {
         spawnEnemies();
+        // }
 
         gameover = false;
     }
@@ -68,6 +71,8 @@ public class Main extends ApplicationAdapter {
         this.moveMissile();
         //this.moveEnemies();
         this.checkCollisions();
+
+        //this.spawnEnemies();
 
         ScreenUtils.clear(1, 0, 0, 1);
         batch.begin();
@@ -157,17 +162,26 @@ public class Main extends ApplicationAdapter {
 //    }
 
     private void checkCollisions() {
-        for (Iterator<Rectangle> iter = enemies.iterator(); iter.hasNext();) {
+        for (Iterator<Rectangle> iter = enemies.iterator(); iter.hasNext(); ) {
             Rectangle enemy = iter.next();
             if (collide(enemy.x, enemy.y, enemy.width, enemy.height, xMissile, yMissile, missile.getWidth(), missile.getHeight()) && attack) {
-                iter.remove(); // Remove o inimigo se houver colisão
+                iter.remove();
                 enemies.clear();
-                attack = false; // Reseta o míssil
-                score++; // Incrementa a pontuação
-                break; // Sai do loop após a remoção
+                attack = false;
+                score++;
+                Timer.schedule(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        spawnEnemies();
+                    }
+                }, 1);
+
+
+                break;
             }
         }
     }
+
     private void moveMissile() {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && !attack) {
             attack = true;
@@ -229,18 +243,18 @@ public class Main extends ApplicationAdapter {
 //        }
 //    }
     private void spawnEnemies() {
-        // Limpa a lista de inimigos caso já exista
+
         enemies.clear();
 
-        // Calcula a largura disponível entre os inimigos
+
         float enemySpacing = Gdx.graphics.getWidth() / 4.0f;
 
-        // Cria 3 inimigos estáticos no topo da tela
+
         for (int i = 0; i < 3; i++) {
             float enemyX = enemySpacing * (i + 1) - tEnemy.getWidth() / 2; // Posiciona os inimigos
             float enemyY = Gdx.graphics.getHeight() - tEnemy.getHeight(); // No topo da tela
 
-            // Cria um novo retângulo para o inimigo
+
             Rectangle enemy = new Rectangle(
                 enemyX,
                 enemyY,
@@ -248,7 +262,7 @@ public class Main extends ApplicationAdapter {
                 tEnemy.getHeight()
             );
 
-            // Adiciona o inimigo à lista de inimigos
+
             enemies.add(enemy);
         }
     }
