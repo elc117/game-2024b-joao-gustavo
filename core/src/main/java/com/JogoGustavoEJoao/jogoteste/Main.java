@@ -237,12 +237,13 @@ public class Main extends ApplicationAdapter {
         enemies.clear();
 
 
-        float enemySpacing = Gdx.graphics.getWidth() / 4.0f;
+        float enemySpacing = Gdx.graphics.getWidth() / 4;
+
 
 
 
         for (int i = 0; i < 3; i++) {
-            float enemyX = enemySpacing * (i + 1) - tEnemy.getWidth() / 2; // Posiciona os inimigos
+            float enemyX = enemySpacing * (i + 1) - tEnemy.getWidth()/2; // Posiciona os inimigos
             float enemyY = Gdx.graphics.getHeight() - tEnemy.getHeight(); // No topo da tela
 
 
@@ -255,8 +256,8 @@ public class Main extends ApplicationAdapter {
 
 
             enemies.add(enemy);
-        }
     }
+}
 
     private boolean collide(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2) {
         return x1 + w1 > x2 && x1 < x2 + w2 && y1 + h1 > y2 && y1 < y2 + h2;
