@@ -37,8 +37,106 @@ public class Main extends ApplicationAdapter {
     @Override
     public void create() {
         Perguntas = new Array<>();
-        Perguntas.add(new Pergunta("Qual é a cor do céu?", new String[]{"Azul", "Verde", "Amarelo"}, 0)
-        );
+        Perguntas.add(new Pergunta(
+            "Em que ano a cidade de Santa Maria foi fundada?",
+            new String[]{"1900", "1857", "1800"},
+            1)); // Resposta correta: 1857
+
+        Perguntas.add(new Pergunta(
+            "Santa Maria também é conhecida como:",
+            new String[]{"Cidade dos Ventos", "Capital do Sul", "Coração do Rio Grande"},
+            2)); // Resposta correta: Coração do Rio Grande
+
+        Perguntas.add(new Pergunta(
+            "A Quarta Colônia é composta por quantos municípios?",
+            new String[]{"9", "11", "7"},
+            0)); // Resposta correta: 9
+
+        Perguntas.add(new Pergunta(
+            "A Quarta Colônia foi formada por imigrantes de que nacionalidade?",
+            new String[]{"Alemães", "Italianos", "Espanhóis"},
+            1)); // Resposta correta: Italianos
+
+        Perguntas.add(new Pergunta(
+            "Quando foi a última vez que descobriram um fóssil na Quarta Colônia?",
+            new String[]{"Maio/2024", "Abril/2023", "Junho/2022"},
+            0)); // Resposta correta: Maio/2024
+
+        Perguntas.add(new Pergunta(
+            "Qual é o nome da área residencial de Santa Maria que foi construída para abrigar construtores de ferrovias no início do século XX?",
+            new String[]{"Vila Operária", "Vila Belga", "Vila Industrial"},
+            1)); // Resposta correta: Vila Belga
+
+        Perguntas.add(new Pergunta(
+            "Quem é a padroeira da cidade de Santa Maria?",
+            new String[]{"Nossa Senhora Aparecida", "Nossa Senhora da Conceição", "Nossa Senhora Medianeira"},
+            1)); // Resposta correta: Nossa Senhora da Conceição
+
+        Perguntas.add(new Pergunta(
+            "Qual é o evento religioso mais famoso da cidade de Santa Maria?",
+            new String[]{"Romaria", "Procissão do Encontro", "Festa de Nossa Senhora"},
+            0)); // Resposta correta: Romaria
+
+        Perguntas.add(new Pergunta(
+            "A Romaria celebra qual santa?",
+            new String[]{"Nossa Senhora Medianeira", "Nossa Senhora da Conceição", "Nossa Senhora Aparecida"},
+            0)); // Resposta correta: Nossa Senhora Medianeira
+
+        Perguntas.add(new Pergunta(
+            "Santa Maria é reconhecida como um polo:",
+            new String[]{"Militar e Educacional", "Industrial e Comercial", "Agrícola e Logístico"},
+            0)); // Resposta correta: Militar e Educacional
+
+        Perguntas.add(new Pergunta(
+            "Santa Maria também é conhecida como ____________ por ter uma localização estratégica no centro do estado.",
+            new String[]{"Cidade dos Caminhos", "Coração do Rio Grande", "Centro do Sul"},
+            0)); // Resposta correta: Cidade dos Caminhos
+
+        Perguntas.add(new Pergunta(
+            "Qual é o evento cultural de mais destaque na Quarta Colônia?",
+            new String[]{"Festival de Dança", "Festival do Imigrante", "Festa da Colônia"},
+            1)); // Resposta correta: Festival do Imigrante
+
+        Perguntas.add(new Pergunta(
+            "Sobre o turismo na Quarta Colônia, se destacam:",
+            new String[]{"Natureza e gastronomia", "Comércio e eventos", "Arte e música"},
+            0)); // Resposta correta: Natureza e gastronomia
+
+        Perguntas.add(new Pergunta(
+            "Qual o evento cultural mais conhecido em Santa Maria?",
+            new String[]{"Feira do Livro", "Festival de Música", "Semana de Arte"},
+            0)); // Resposta correta: Feira do Livro
+
+        Perguntas.add(new Pergunta(
+            "Qual a população aproximada de Santa Maria?",
+            new String[]{"271.000", "300.000", "250.000"},
+            0)); // Resposta correta: 271.000
+
+        Perguntas.add(new Pergunta(
+            "Qual árvore é considerada o símbolo de Santa Maria?",
+            new String[]{"Ipê-Roxo", "Araucária", "Figueira"},
+            0)); // Resposta correta: Ipê-Roxo
+
+        Perguntas.add(new Pergunta(
+            "Qual a população aproximada da Quarta Colônia?",
+            new String[]{"70.000", "58.000", "60.000"},
+            1)); // Resposta correta: 58.000
+
+        Perguntas.add(new Pergunta(
+            "Quais as cidades com mais habitantes da Quarta Colônia?",
+            new String[]{"Silveira Martins e São João do Polêsine", "Agudo e Restinga Seca", "Nova Palma e Dona Francisca"},
+            1)); // Resposta correta: Agudo e Restinga Seca
+
+        Perguntas.add(new Pergunta(
+            "Quantas espécies foram descobertas por fósseis encontrados na Quarta Colônia?",
+            new String[]{"40 espécies", "35 espécies", "30 espécies"},
+            1)); // Resposta correta: 35 espécies
+
+        Perguntas.add(new Pergunta(
+            "José Mariano da Rocha Filho foi importante para a cidade de Santa Maria por:",
+            new String[]{"Criar o primeiro jornal da cidade", "Fundar a UFSM", "Ser prefeito da cidade"},
+            1)); // Resposta correta: Fundar a UFSM
+
         currentQuestion = Perguntas.get(0);
 
 
