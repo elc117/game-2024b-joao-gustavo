@@ -31,8 +31,19 @@ public class Main extends ApplicationAdapter {
 
     private BitmapFont bitmap;
 
+    private Array<Pergunta> Perguntas;
+    private Pergunta currentQuestion;
+
     @Override
     public void create() {
+        Perguntas = new Array<>();
+        Perguntas.add(new Pergunta(
+            "Qual é a cor do céu?",
+            new String[]{"Azul", "Verde", "Amarelo"},
+            0 // Resposta correta: Azul
+        ));
+
+
         batch = new SpriteBatch();
         img = new Texture("bg.png");
         tNave = new Texture("spaceship.png");
