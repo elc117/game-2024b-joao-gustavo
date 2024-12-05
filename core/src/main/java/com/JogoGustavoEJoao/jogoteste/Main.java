@@ -67,6 +67,7 @@ public class Main extends ApplicationAdapter {
         this.moveNave();
         this.moveMissile();
         //this.moveEnemies();
+        this.checkCollisions();
 
         ScreenUtils.clear(1, 0, 0, 1);
         batch.begin();
@@ -154,6 +155,19 @@ public class Main extends ApplicationAdapter {
 //            yMissile = posY + nave.getHeight() / 2 - 12;
 //        }
 //    }
+
+    private void checkCollisions() {
+        for (Iterator<Rectangle> iter = enemies.iterator(); iter.hasNext();) {
+            Rectangle enemy = iter.next();
+            if (collide(enemy.x, enemy.y, enemy.width, enemy.height, xMissile, yMissile, missile.getWidth(), missile.getHeight()) && attack) {
+                iter.remove(); // Remove o inimigo se houver colisão
+                enemies.clear();
+                attack = false; // Reseta o míssil
+                score++; // Incrementa a pontuação
+                break; // Sai do loop após a remoção
+            }
+        }
+    }
     private void moveMissile() {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && !attack) {
             attack = true;
