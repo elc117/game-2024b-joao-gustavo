@@ -203,7 +203,7 @@ public class Main extends ApplicationAdapter {
             for (EnemyAnswerPair pair : enemyAnswerPairs) {
                 Rectangle enemy = pair.enemy;
                 batch.draw(tEnemy, enemy.x, enemy.y, enemy.width, enemy.height);
-                bitmap.draw(batch, pair.answer, enemy.x + 20, enemy.y + enemy.height / 2 + 10);
+                bitmap.draw(batch, pair.answer, enemy.x + 120, enemy.y + enemy.height / 2 );
             }
 
             bitmap.draw(batch, "Pergunta: " + currentQuestion.text, 20, 150);
@@ -275,7 +275,7 @@ public class Main extends ApplicationAdapter {
                         currentQuestion = Perguntas.get(questionIndex);
                         spawnEnemies();
                     } else {
-                        gameover = true; // Fim do jogo
+                        gameover = true;
                     }
                 } else {
                     power--;
@@ -301,7 +301,7 @@ public class Main extends ApplicationAdapter {
 
         if (attack) {
             if (yMissile < Gdx.graphics.getWidth()) {
-                yMissile += 40;
+                yMissile += 15;
             } else {
                 yMissile = posY + nave.getWidth() / 2;
                 attack = false;
