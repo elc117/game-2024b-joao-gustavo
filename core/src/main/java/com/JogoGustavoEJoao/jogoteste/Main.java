@@ -28,16 +28,16 @@ public class Main extends ApplicationAdapter {
     private Array<Rectangle> enemies;
     private long lastEnemyTime;
     private int score, power, numEnemies;
-    private int questionIndex; // Índice atual da pergunta
+    private int questionIndex;
 
     private BitmapFont bitmap;
 
     private Array<Pergunta> Perguntas;
     private Pergunta currentQuestion;
+    private Array<EnemyAnswerPair> enemyAnswerPairs;
 
     @Override
     public void create() {
-        // Inicialize a lista de perguntas
         Perguntas = new Array<>();
         Perguntas.add(new Pergunta(
             "Em que ano a cidade de Santa Maria foi fundada?",
@@ -51,7 +51,7 @@ public class Main extends ApplicationAdapter {
         ));
         Perguntas.add(new Pergunta(
             "A Quarta Colônia é composta por quantos municípios?",
-            new String[]{"11", "11", "9"},
+            new String[]{"7", "11", "9"},
             2)); // Resposta correta: 9
 
         Perguntas.add(new Pergunta(
@@ -131,7 +131,7 @@ public class Main extends ApplicationAdapter {
 
         Perguntas.add(new Pergunta(
             "Qual a população aproximada da Quarta Colônia?",
-            new String[]{"70.000", "58.000", "60.000"},
+            new String[]{"35.000", "58.000", "72.000"},
             1)); // Resposta correta: 58.000
 
         Perguntas.add(new Pergunta(
@@ -156,7 +156,6 @@ public class Main extends ApplicationAdapter {
         questionIndex = 0;
         currentQuestion = Perguntas.get(questionIndex);
 
-        // Inicialize os componentes do jogo
         batch = new SpriteBatch();
         img = new Texture("bg.png");
         tNave = new Texture("spaceship.png");
@@ -201,31 +200,35 @@ public class Main extends ApplicationAdapter {
             }
             batch.draw(nave, posX, posY);
 
-
-            for (int i = 0; i < enemies.size; i++) {
-                Rectangle enemy = enemies.get(i);
+            for (EnemyAnswerPair pair : enemyAnswerPairs) {
+                Rectangle enemy = pair.enemy;
                 batch.draw(tEnemy, enemy.x, enemy.y, enemy.width, enemy.height);
-                bitmap.draw(batch, currentQuestion.answers[i], enemy.x + 80, enemy.y + enemy.height / 2);
+                bitmap.draw(batch, pair.answer, enemy.x + 20, enemy.y + enemy.height / 2 + 10);
             }
-
 
             bitmap.draw(batch, "Pergunta: " + currentQuestion.text, 20, 150);
             bitmap.draw(batch, "Score: " + score, 20, Gdx.graphics.getHeight() - 20);
             bitmap.draw(batch, "Power: " + power, Gdx.graphics.getWidth() - 150, Gdx.graphics.getHeight() - 20);
         } else {
             bitmap.draw(batch, "GAME OVER", Gdx.graphics.getWidth() / 2 - 50, Gdx.graphics.getHeight() / 2);
+            bitmap.draw(batch, "Pressione ENTER para reiniciar", Gdx.graphics.getWidth() / 2 - 100, Gdx.graphics.getHeight() / 2 - 20);
 
             if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-                score = 0;
-                power = 3;
-                questionIndex = 0;
-                currentQuestion = Perguntas.get(questionIndex);
-                spawnEnemies();
-                gameover = false;
+                resetGame();
             }
         }
 
         batch.end();
+    }
+
+
+    private void resetGame() {
+        score = 0;
+        power = 3;
+        questionIndex = 0;
+        currentQuestion = Perguntas.get(questionIndex);
+        spawnEnemies();
+        gameover = false;
     }
 
     @Override
@@ -252,25 +255,43 @@ public class Main extends ApplicationAdapter {
     }
 
     private void checkCollisions() {
-        for (Iterator<Rectangle> iter = enemies.iterator(); iter.hasNext(); ) {
-            Rectangle enemy = iter.next();
+        Iterator<EnemyAnswerPair> iter = enemyAnswerPairs.iterator();
+
+        while (iter.hasNext()) {
+            EnemyAnswerPair pair = iter.next();
+            Rectangle enemy = pair.enemy;
+
+
             if (collide(enemy.x, enemy.y, enemy.width, enemy.height, xMissile, yMissile, missile.getWidth(), missile.getHeight()) && attack) {
-                iter.remove();
                 attack = false;
-                score++;
+                if (pair.answer.equals(currentQuestion.answers[currentQuestion.correctAnswerIndex])) {
+                    score += 10;
+                    Gdx.app.log("Resposta", "Correta!");
 
+                    iter.remove();
 
-                questionIndex++;
-                if (questionIndex < Perguntas.size) {
-                    currentQuestion = Perguntas.get(questionIndex);
-                    spawnEnemies();
+                    questionIndex++;
+                    if (questionIndex < Perguntas.size) {
+                        currentQuestion = Perguntas.get(questionIndex);
+                        spawnEnemies();
+                    } else {
+                        gameover = true; // Fim do jogo
+                    }
                 } else {
+                    power--;
+                    Gdx.app.log("Resposta", "Errada!");
+
+                    iter.remove();
+                }
+
+                if (power <= 0) {
                     gameover = true;
                 }
                 break;
             }
         }
     }
+
 
     private void moveMissile() {
         if (Gdx.input.isKeyPressed(Input.Keys.SPACE) && !attack) {
@@ -292,7 +313,7 @@ public class Main extends ApplicationAdapter {
     }
 
     private void spawnEnemies() {
-        enemies.clear();
+        enemyAnswerPairs = new Array<>();
 
         float enemySpacing = Gdx.graphics.getWidth() / 4.0f;
         float enemyWidth = tEnemy.getWidth() * 1.5f;
@@ -303,9 +324,10 @@ public class Main extends ApplicationAdapter {
             float enemyY = Gdx.graphics.getHeight() - enemyHeight;
 
             Rectangle enemy = new Rectangle(enemyX, enemyY, enemyWidth, enemyHeight);
-            enemies.add(enemy);
+            enemyAnswerPairs.add(new EnemyAnswerPair(enemy, currentQuestion.answers[i]));
         }
     }
+
 
     private boolean collide(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2) {
         return x1 + w1 > x2 && x1 < x2 + w2 && y1 + h1 > y2 && y1 < y2 + h2;
