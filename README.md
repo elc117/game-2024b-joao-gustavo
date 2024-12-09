@@ -29,10 +29,11 @@
 
 * Uma das partes mais difíceis do desenvolvimento deste projeto foi fazer as funções de colisão.
 * O primeiro passo foi fazer uma função para verificar se o retângulo do míssil se sobrepõe ao retângulo de algum inimigo. A função `collide` analisa se as bordas de um retângulo e outro se sobrepõem
-
- `private boolean collide(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2) {
+ ```
+ private boolean collide(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2) {
   return x1 + w1 > x2 && x1 < x2 + w2 && y1 + h1 > y2 && y1 < y2 + h2;
-  }`
+  }
+ ```
 
 * A verificação da colisão e consêquencias dessa colisão acontecem na função `checkCollisions`
 
@@ -46,8 +47,45 @@ O inimigo é removido da lista de inimigos.
 Se o poder do jogador acabar, o jogo termina (`gameover = true`).
 
 
+### Criação de classes:
+* Foram criadas 2 classes para o funcionamento do jogo a classe `Pergunta` e a classe `EnemyAnswerPair`
 
+* A classe `Pergunta` que está definida com 3 atributos 1 metódo construtor.
 
+ ```
+
+public class Pergunta {
+    public String text; // Texto da pergunta
+    public String[] answers; // Respostas possíveis
+    public int correctAnswerIndex; // Índice da resposta correta
+    
+    public Question(String text, String[] answers, int correctAnswerIndex) {
+        this.text = text;
+        this.answers = answers;
+        this.correctAnswerIndex = correctAnswerIndex;
+    }
+}
+
+ ```
+* E a classe `EnemyAnswerPair` que conta com 2 atributos e 1 método construtor
+
+```
+public class EnemyAnswerPair {
+Rectangle enemy;
+String answer;
+
+    public EnemyAnswerPair(Rectangle enemy, String answer) {
+        this.enemy = enemy;
+        this.answer = answer;
+    }
+}
+```
+
+* Após a criação dessas 2 classes foi necessário apenas criar as instanciar as perguntas, e então designar as opções de respostas a cada inimigo.
+
+### Finalizando o jogo:
+
+* Nos commits finais foi adcionado a lógica de quiz do jogo onde uma resposta era desenhada no inimigo e caso a resposta fosse correta seguia para a pergunta seguinte e em caso de um erro a opção sumia e só restavam as opções que ainda não haviam sido tentadas.
 
 
 
