@@ -12,12 +12,39 @@
 
 ### Primeiro commit:
 
-* O primeiro commit dado no projeto se tratava de uma versão extremamente embrionária do projeto que constava mais como um teste das funcionalidades do Libgdx(Movimentação de personagens, criação de inimigos, escrita na tela) que propriamente uma versão do que posteriormente seria o jogo.
+* O primeiro commit dado no projeto se tratava de uma versão extremamente embrionária do projeto que constava mais como um teste das funcionalidades do Libgdx aprendidas na internet(Movimentação de personagens, criação de inimigos, escrita na tela) que propriamente uma versão do que posteriormente seria o jogo.
 
 * Nesse primeiro commit vale destacar a primeira expêriencia com palavras desconhecidas como `batch`, `texture` e `Sprite`
 * Foi entendido por nós que o `batch` era utilizado para fazer desenhos na tela, o `texture` para carregar um `.png` que posteriormente seria usado no jogo, e o `sprite` para fazer com que as imagens "ganhem vida"
 
 ### Segunda fase do desenvolvimento:
+
+* Em um segundo momento com a ideia já mais estruturada e um entendimento melhor sobre a nova biblioteca, começamos de fato a fazer o nosso jogo com a nossa ideia de um explorador que "atacaria" as respostas. 
+* Função `spawnEnemies`: Agora, a função foi reformulada para gerar três inimigos posicionados no topo da tela, em vez de criar múltiplos inimigos aleatórios que se moviam na direção do explorador.
+* Função `moveNave`: A lógica de movimento do explorador foi ajustada para permitir que ele se mova apenas horizontalmente, tornando o controle mais simples e intuitivo.
+* Função `moveMissile`: A função responsável pelos disparos do explorador foi modificada para garantir que os tiros sigam a direção correta, alinhados com a lógica do desafio proposto.
+
+
+### Funções de colisão
+
+* Uma das partes mais difíceis do desenvolvimento deste projeto foi fazer as funções de colisão.
+* O primeiro passo foi fazer uma função para verificar se o retângulo do míssil se sobrepõe ao retângulo de algum inimigo. A função `collide` analisa se as bordas de um retângulo e outro se sobrepõem
+
+ `private boolean collide(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2) {
+  return x1 + w1 > x2 && x1 < x2 + w2 && y1 + h1 > y2 && y1 < y2 + h2;
+  }`
+
+* A verificação da colisão e consêquencias dessa colisão acontecem na função `checkCollisions`
+
+
+
+* Para cada inimigo, verifica se o míssil está colidindo com ele usando a função `collide`.
+Se o míssil colidir, o ataque é desativado (`attack = false`).
+Se o inimigo contiver a resposta correta, a pontuação aumenta.
+Se a resposta for errada, o jogador perde poder (`power--`).
+O inimigo é removido da lista de inimigos.
+Se o poder do jogador acabar, o jogo termina (`gameover = true`).
+
 
 
 
