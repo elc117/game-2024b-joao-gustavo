@@ -1,101 +1,36 @@
-# Jogo João e Gustavo
-* Integrantes: Gustavo Machado Teixeira, João Antônio B. Lobler
-* Curso: Sistemas de Informação
+# pardaims
 
-## Ideia do jogo:
-* O jogo é uma aventura interativa que combina ação e conhecimento sobre a região central do Rio Grande do Sul. O jogador assume o papel de um explorador destemido que precisa derrotar inimigos ao longo do caminho. Cada inimigo traz uma pergunta desafiadora sobre a cultura, história e curiosidades da região. Para vencer, o jogador deve responder corretamente, atirando no inimigo que exibe a resposta certa.
+A [libGDX](https://libgdx.com/) project generated with [gdx-liftoff](https://github.com/libgdx/gdx-liftoff).
 
-## Desenvolvimento
+This project was generated with a template including simple application launchers and an `ApplicationAdapter` extension that draws libGDX logo.
 
-### Fase inicial:
-* Inicialmente buscamos entender como funcionava a biblioteca. Entendendo seus conceitos básicos, desde como iniciar e rodar um projeto, até a parte de movimentos iniciais como colocar uma imagem como plano de fundo.
+## Platforms
 
-### Primeiro commit:
+- `core`: Main module with the application logic shared by all platforms.
+- `lwjgl3`: Primary desktop platform using LWJGL3; was called 'desktop' in older docs.
+- `html`: Web platform using GWT and WebGL. Supports only Java projects.
 
-* O primeiro commit dado no projeto se tratava de uma versão extremamente embrionária do projeto que constava mais como um teste das funcionalidades do Libgdx aprendidas na internet(Movimentação de personagens, criação de inimigos, escrita na tela) que propriamente uma versão do que posteriormente seria o jogo.
+## Gradle
 
-* Nesse primeiro commit vale destacar a primeira expêriencia com palavras desconhecidas como `batch`, `texture` e `Sprite`
-* Foi entendido por nós que o `batch` era utilizado para fazer desenhos na tela, o `texture` para carregar um `.png` que posteriormente seria usado no jogo, e o `sprite` para fazer com que as imagens "ganhem vida"
+This project uses [Gradle](https://gradle.org/) to manage dependencies.
+The Gradle wrapper was included, so you can run Gradle tasks using `gradlew.bat` or `./gradlew` commands.
+Useful Gradle tasks and flags:
 
-### Segunda fase do desenvolvimento:
+- `--continue`: when using this flag, errors will not stop the tasks from running.
+- `--daemon`: thanks to this flag, Gradle daemon will be used to run chosen tasks.
+- `--offline`: when using this flag, cached dependency archives will be used.
+- `--refresh-dependencies`: this flag forces validation of all dependencies. Useful for snapshot versions.
+- `build`: builds sources and archives of every project.
+- `cleanEclipse`: removes Eclipse project data.
+- `cleanIdea`: removes IntelliJ project data.
+- `clean`: removes `build` folders, which store compiled classes and built archives.
+- `eclipse`: generates Eclipse project data.
+- `html:dist`: compiles GWT sources. The compiled application can be found at `html/build/dist`: you can use any HTTP server to deploy it.
+- `html:superDev`: compiles GWT sources and runs the application in SuperDev mode. It will be available at [localhost:8080/html](http://localhost:8080/html). Use only during development.
+- `idea`: generates IntelliJ project data.
+- `lwjgl3:jar`: builds application's runnable jar, which can be found at `lwjgl3/build/libs`.
+- `lwjgl3:run`: starts the application.
+- `test`: runs unit tests (if any).
 
-* Em um segundo momento com a ideia já mais estruturada e um entendimento melhor sobre a nova biblioteca, começamos de fato a fazer o nosso jogo com a nossa ideia de um explorador que "atacaria" as respostas. 
-* Função `spawnEnemies`: Agora, a função foi reformulada para gerar três inimigos posicionados no topo da tela, em vez de criar múltiplos inimigos aleatórios que se moviam na direção do explorador.
-* Função `moveNave`: A lógica de movimento do explorador foi ajustada para permitir que ele se mova apenas horizontalmente, tornando o controle mais simples e intuitivo.
-* Função `moveMissile`: A função responsável pelos disparos do explorador foi modificada para garantir que os tiros sigam a direção correta, alinhados com a lógica do desafio proposto.
-
-
-### Funções de colisão
-
-* Uma das partes mais difíceis do desenvolvimento deste projeto foi fazer as funções de colisão.
-* O primeiro passo foi fazer uma função para verificar se o retângulo do míssil se sobrepõe ao retângulo de algum inimigo. A função `collide` analisa se as bordas de um retângulo e outro se sobrepõem
- ```
- private boolean collide(float x1, float y1, float w1, float h1, float x2, float y2, float w2, float h2) {
-  return x1 + w1 > x2 && x1 < x2 + w2 && y1 + h1 > y2 && y1 < y2 + h2;
-  }
- ```
-
-* A verificação da colisão e consêquencias dessa colisão acontecem na função `checkCollisions`
-
-
-
-* Para cada inimigo, verifica se o míssil está colidindo com ele usando a função `collide`.
-Se o míssil colidir, o ataque é desativado (`attack = false`).
-Se o inimigo contiver a resposta correta, a pontuação aumenta.
-Se a resposta for errada, o jogador perde poder (`power--`).
-O inimigo é removido da lista de inimigos.
-Se o poder do jogador acabar, o jogo termina (`gameover = true`).
-
-
-### Criação de classes:
-* Foram criadas 2 classes para o funcionamento do jogo a classe `Pergunta` e a classe `EnemyAnswerPair`
-
-* A classe `Pergunta` que está definida com 3 atributos 1 metódo construtor.
-
- ```
-
-public class Pergunta {
-    public String text; // Texto da pergunta
-    public String[] answers; // Respostas possíveis
-    public int correctAnswerIndex; // Índice da resposta correta
-    
-    public Question(String text, String[] answers, int correctAnswerIndex) {
-        this.text = text;
-        this.answers = answers;
-        this.correctAnswerIndex = correctAnswerIndex;
-    }
-}
-
- ```
-* E a classe `EnemyAnswerPair` que conta com 2 atributos e 1 método construtor
-
-```
-public class EnemyAnswerPair {
-Rectangle enemy;
-String answer;
-
-    public EnemyAnswerPair(Rectangle enemy, String answer) {
-        this.enemy = enemy;
-        this.answer = answer;
-    }
-}
-```
-
-* Após a criação dessas 2 classes foi necessário apenas criar as instanciar as perguntas, e então designar as opções de respostas a cada inimigo.
-
-### Finalizando o jogo:
-
-* Nos commits finais foi adcionado a lógica de quiz do jogo onde uma resposta era desenhada no inimigo e caso a resposta fosse correta seguia para a pergunta seguinte e em caso de um erro a opção sumia e só restavam as opções que ainda não haviam sido tentadas.
-
-
-
-### Referências:
-
-* https://libgdx.com/wiki/start/project-generation
-* https://www.youtube.com/watch?v=VF6N_X_oWr0
-* https://libgdx.com/wiki/input/simple-text-input
-* https://stackoverflow-com.translate.goog/questions/51013197/libgdx-internal-calls-to-mathutils-random-interfere-with-the-sequence-of-rando?_x_tr_sl=en&_x_tr_tl=pt&_x_tr_hl=pt-BR&_x_tr_pto=sc
-* https://libgdx.com/wiki/math-utils/math-utilities
-* https://youtube.com/playlist?list=PLUJBQEDDLNclxZvKTT2Icq9aVBPqLRMCA&si=YnfaG3oQg-8QN8zc
-* https://www.locaweb.com.br/blog/temas/codigo-aberto/git-pull-aprenda-a-usar-o-comando/
-
+Note that most tasks that are not specific to a single project can be run with `name:` prefix, where the `name` should be replaced with the ID of a specific project.
+For example, `core:clean` removes `build` folder only from the `core` project.
