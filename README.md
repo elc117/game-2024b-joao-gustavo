@@ -88,7 +88,7 @@ String answer;
 * Nos commits finais foi adcionado a lógica de quiz do jogo onde uma resposta era desenhada no inimigo e caso a resposta fosse correta seguia para a pergunta seguinte e em caso de um erro a opção sumia e só restavam as opções que ainda não haviam sido tentadas.
 
 
-teste
+
 
 
 ### Referências:
